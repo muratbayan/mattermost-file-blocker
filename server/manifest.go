@@ -12,9 +12,9 @@ var manifest *model.Manifest
 
 const manifestStr = `
 {
-  "id": "com.mattermost.plugin-starter-template",
-  "name": "Plugin Starter Template",
-  "description": "This plugin serves as a starting point for writing a Mattermost plugin.",
+  "id": "com.github.muratbayan.mattermost-file-block",
+  "name": "File Block plugin",
+  "description": "This plugin helps block the upload of unauthorized file extensions to the Mattermost server.",
   "version": "0.1.0",
   "min_server_version": "5.12.0",
   "server": {
@@ -31,7 +31,24 @@ const manifestStr = `
   "settings_schema": {
     "header": "",
     "footer": "",
-    "settings": []
+    "settings": [
+      {
+        "key": "ForbiddenExtensions",
+        "display_name": "Forbidden Extensions",
+        "type": "text",
+        "help_text": "Comma separated list of extensions that are forbidden for file attachments",
+        "placeholder": "",
+        "default": ""
+      },
+      {
+        "key": "ExtensionIsRequired",
+        "display_name": "Require extension",
+        "type": "bool",
+        "help_text": "Set to true if file attachments require having an extension",
+        "placeholder": "",
+        "default": false
+      }
+    ]
   }
 }
 `
