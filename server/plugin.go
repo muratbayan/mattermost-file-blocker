@@ -5,6 +5,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/gabriel-vasile/mimetype"
+
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
 )
@@ -35,24 +37,34 @@ func (p *FileBlockPlugin) FileWillBeUploaded(c *plugin.Context, info *model.File
 	config := p.getConfiguration()
 	// message := "This file could not be attached to your post"
 
-	extensions := strings.Split(config.ForbiddenExtensions, ",")
+	extensions := strings.Split(config.AllowedExtensions, ",")
 
 	if config.ExtensionIsRequired && info.Extension == "" {
 		p.API.LogWarn("File attachments without extensions are not allowed", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension)
-		return nil, "The File Block plugin did not allow you to attach this file."
+		return nil, "File block plugin - File attachments without extensions are not allowed"
 	}
 
 	found := stringSliceContains(extensions, info.Extension)
 
-	if found {
-		postInfo, _ := p.API.GetPost(info.PostId)
+	if !found {
+		p.API.LogWarn("Unsupported file attachment extension", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension, "allowedExtensions", strings.Join(extensions, ", "))
+		return nil, "File Block plugin - This file atachment extension is not allowed"
+	}
 
-		if postInfo != nil {
-			p.API.LogWarn("ChannelID", "channelId", postInfo.ChannelId)
+	if config.CheckMimeType {
+		mimeTypeResult, _ := mimetype.DetectReader(file)
+
+		p.API.LogInfo("MIME Output", "mimeTypeResult", mimeTypeResult.String())
+		p.API.LogInfo("MIME Extension", "mimeTypeResult", mimeTypeResult.Extension())
+
+		mimeExtension := strings.Trim(mimeTypeResult.Extension(), ".")
+
+		mimeFound := stringSliceContains(extensions, mimeExtension)
+
+		// Should we simply fail whenever the extension does not match the mime extension?
+		if !mimeFound {
+			return nil, "File Block plugin - Extension does not match MIME extension and this MIME extension is not whitelisted"
 		}
-
-		p.API.LogWarn("Unsupported file attachment extension", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension)
-		return nil, "The File Block plugin did not allow you to attach this file."
 	}
 
 	return info, ""

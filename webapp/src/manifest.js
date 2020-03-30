@@ -5,7 +5,7 @@ const manifest = JSON.parse(`
     "id": "com.github.muratbayan.mattermost-file-block",
     "name": "File Block plugin",
     "description": "This plugin helps block the upload of unauthorized file extensions to the Mattermost server.",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "min_server_version": "5.12.0",
     "server": {
         "executables": {
@@ -23,10 +23,10 @@ const manifest = JSON.parse(`
         "footer": "",
         "settings": [
             {
-                "key": "ForbiddenExtensions",
-                "display_name": "Forbidden Extensions",
+                "key": "AllowedExtensions",
+                "display_name": "Allowed extensions",
                 "type": "text",
-                "help_text": "Comma separated list of extensions that are forbidden for file attachments",
+                "help_text": "Comma separated list of allowed extensions for file attachments",
                 "placeholder": "",
                 "default": ""
             },
@@ -35,6 +35,14 @@ const manifest = JSON.parse(`
                 "display_name": "Require extension",
                 "type": "bool",
                 "help_text": "Set to true if file attachments require having an extension",
+                "placeholder": "",
+                "default": false
+            },
+            {
+                "key": "CheckMimeType",
+                "display_name": "Check Mime Content",
+                "type": "bool",
+                "help_text": "Set to true if the plugin should check the MIME content type",
                 "placeholder": "",
                 "default": false
             }
