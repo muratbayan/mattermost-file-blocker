@@ -41,7 +41,7 @@ func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.Fi
 
 	if config.ExtensionIsRequired && info.Extension == "" {
 		p.API.LogWarn("File attachments without extensions are not allowed", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension)
-		return nil, "File blocker plugin - File attachments without extensions are not allowed"
+		return nil, "File Blocker plugin - File attachments without extensions are not allowed"
 	}
 
 	found := stringSliceContains(extensions, info.Extension)
