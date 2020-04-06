@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	plugin.ClientMain(&FileBlockPlugin{})
+	plugin.ClientMain(&FileBlockerPlugin{})
 }

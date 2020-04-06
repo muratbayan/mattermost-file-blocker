@@ -12,10 +12,10 @@ var manifest *model.Manifest
 
 const manifestStr = `
 {
-  "id": "com.github.muratbayan.mattermost-file-block",
-  "name": "File Block",
+  "id": "com.github.muratbayan.mattermost-file-blocker",
+  "name": "File Blocker",
   "description": "This plugin helps block the upload of unauthorized file extensions to the Mattermost server.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "min_server_version": "5.12.0",
   "server": {
     "executables": {
@@ -47,7 +47,7 @@ const manifestStr = `
       },
       {
         "key": "CheckMimeType",
-        "display_name": "[Experimental] Validate Mime Content",
+        "display_name": "[Experimental] Validate MIME Content",
         "type": "bool",
         "help_text": "Set to true if the plugin should check the MIME content type",
         "placeholder": "",

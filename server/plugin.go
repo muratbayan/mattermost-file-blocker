@@ -11,8 +11,8 @@ import (
 	"github.com/mattermost/mattermost-server/v5/plugin"
 )
 
-// FileBlockPlugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
-type FileBlockPlugin struct {
+// FileBlockerPlugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
+type FileBlockerPlugin struct {
 	plugin.MattermostPlugin
 
 	// configurationLock synchronizes access to the configuration.
@@ -33,7 +33,7 @@ func stringSliceContains(s []string, e string) bool {
 }
 
 // FileWillBeUploaded matches file attachments against known extensions from configuration
-func (p *FileBlockPlugin) FileWillBeUploaded(c *plugin.Context, info *model.FileInfo, file io.Reader, output io.Writer) (*model.FileInfo, string) {
+func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.FileInfo, file io.Reader, output io.Writer) (*model.FileInfo, string) {
 	config := p.getConfiguration()
 	// message := "This file could not be attached to your post"
 
@@ -41,14 +41,14 @@ func (p *FileBlockPlugin) FileWillBeUploaded(c *plugin.Context, info *model.File
 
 	if config.ExtensionIsRequired && info.Extension == "" {
 		p.API.LogWarn("File attachments without extensions are not allowed", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension)
-		return nil, "File block plugin - File attachments without extensions are not allowed"
+		return nil, "File blocker plugin - File attachments without extensions are not allowed"
 	}
 
 	found := stringSliceContains(extensions, info.Extension)
 
 	if !found {
 		p.API.LogWarn("Unsupported file attachment extension", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension, "allowedExtensions", strings.Join(extensions, ", "))
-		return nil, "File Block plugin - This file atachment extension is not allowed"
+		return nil, "File Blocker plugin - This file attachment extension is not allowed"
 	}
 
 	if config.CheckMimeType {
@@ -63,7 +63,7 @@ func (p *FileBlockPlugin) FileWillBeUploaded(c *plugin.Context, info *model.File
 
 		// Should we simply fail whenever the extension does not match the mime extension?
 		if !mimeFound {
-			return nil, "File Block plugin - Extension does not match MIME extension and this MIME extension is not whitelisted"
+			return nil, "File Blocker plugin - Extension does not match MIME extension and this MIME extension is not whitelisted"
 		}
 	}
 
