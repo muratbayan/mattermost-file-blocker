@@ -4,7 +4,6 @@
     "description": "This plugin helps block the upload of unauthorized file extensions to the Mattermost server.",
     "homepage_url": "https://github.com/muratbayan/mattermost-file-blocker",
     "support_url": "https://github.com/muratbayan/mattermost-file-blocker/issues",
-    "release_notes_url": "https://github.com/muratbayan/mattermost-file-blocker/releases",
     "version": "1.0.0",
     "min_server_version": "5.12.0",
     "server": {
