@@ -2,6 +2,8 @@
 
 This plugin allows Mattermost administrators to block file uploads with specific extensions.
 
+![Screenshot 2020-04-06 at 23 01 56 copy](https://user-images.githubusercontent.com/6051508/78684707-b5704100-78e8-11ea-80d1-5fabd42ff036.png)
+
 ## Plugin Parameters
 
 * Allowed extensions - Comma separated list of allowed (whitelisted) extensions. e.g. "doc,docx,png,pdf"
