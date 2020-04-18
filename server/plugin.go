@@ -40,25 +40,24 @@ func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.Fi
 	extensions := strings.Split(config.AllowedExtensions, ",")
 
 	if config.ExtensionIsRequired && info.Extension == "" {
-		p.API.LogWarn("File attachments without extensions are not allowed", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension)
+		p.API.LogInfo("File attachments without extensions are not allowed", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension)
 		return nil, "File Blocker plugin - File attachments without extensions are not allowed"
 	}
 
 	found := stringSliceContains(extensions, info.Extension)
 
 	if !found {
-		p.API.LogWarn("Unsupported file attachment extension", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension, "allowedExtensions", strings.Join(extensions, ", "))
+		p.API.LogInfo("Unsupported file attachment extension", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension, "allowedExtensions", strings.Join(extensions, ", "))
 		return nil, "File Blocker plugin - This file attachment extension is not allowed"
 	}
 
 	if config.CheckMimeType {
 		mimeTypeResult, _ := mimetype.DetectReader(file)
 
-		p.API.LogInfo("MIME Output", "mimeTypeResult", mimeTypeResult.String())
-		p.API.LogInfo("MIME Extension", "mimeTypeResult", mimeTypeResult.Extension())
+		p.API.LogDebug("MIME Output", "mimeTypeResult", mimeTypeResult.String())
+		p.API.LogDebug("MIME Extension", "mimeTypeResult", mimeTypeResult.Extension())
 
 		mimeExtension := strings.Trim(mimeTypeResult.Extension(), ".")
-
 		mimeFound := stringSliceContains(extensions, mimeExtension)
 
 		// Should we simply fail whenever the extension does not match the mime extension?
