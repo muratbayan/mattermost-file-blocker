@@ -52,7 +52,12 @@ func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.Fi
 	}
 
 	if config.CheckMimeType {
-		mimeTypeResult, _ := mimetype.DetectReader(file)
+		mimeTypeResult, mimeErr := mimetype.DetectReader(file)
+
+		if mimeErr != nil {
+			p.API.LogError("MIME Type detection error", "filename", info.Name, "user", info.CreatorId)
+			return nil, "File Blocker plugin - An error occured during the verification of the file attachment - Please contact your administrator"
+		}
 
 		p.API.LogDebug("MIME Output", "mimeTypeResult", mimeTypeResult.String())
 		p.API.LogDebug("MIME Extension", "mimeTypeResult", mimeTypeResult.Extension())
