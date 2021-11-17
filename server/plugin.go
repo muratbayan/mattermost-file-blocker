@@ -35,7 +35,23 @@ func stringSliceContains(s []string, e string) bool {
 // FileWillBeUploaded matches file attachments against known extensions from configuration
 func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.FileInfo, file io.Reader, output io.Writer) (*model.FileInfo, string) {
 	config := p.getConfiguration()
-	// message := "This file could not be attached to your post"
+	p.API.LogInfo("session Id from context", "sessionId", c.SessionId)
+	p.API.LogInfo("User Agent from context", "userAgent", c.UserAgent)
+	p.API.LogInfo("RequestId from context", "requestId", c.RequestId)
+	p.API.LogInfo("Plugin context", "pluginContext", c)
+
+	session, sessionErr := p.API.GetSession(c.SessionId)
+
+	if sessionErr != nil {
+		p.API.LogError("Session retrieval error", "error", sessionErr.Error(), "detailedError", sessionErr.DetailedError)
+		return nil, "File Blocker plugin - There was an error retrieving the session information"
+	}
+
+	if session.IsMobileApp() {
+		p.API.LogInfo("The session is a mobile session")
+	} else {
+		p.API.LogInfo("The session is not a mobile session")
+	}
 
 	extensions := strings.Split(config.AllowedExtensions, ",")
 
