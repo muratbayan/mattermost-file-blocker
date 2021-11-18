@@ -17,8 +17,8 @@ const manifestStr = `
   "description": "This plugin helps block the upload of unauthorized file extensions to the Mattermost server.",
   "homepage_url": "https://github.com/muratbayan/mattermost-file-blocker",
   "support_url": "https://github.com/muratbayan/mattermost-file-blocker/issues",
-  "version": "1.0.0",
-  "min_server_version": "5.12.0",
+  "version": "1.1.0",
+  "min_server_version": "5.26.0",
   "server": {
     "executables": {
       "linux-amd64": "server/dist/plugin-linux-amd64",

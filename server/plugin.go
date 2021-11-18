@@ -7,8 +7,8 @@ import (
 
 	"github.com/gabriel-vasile/mimetype"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/mattermost/mattermost-server/v6/model"
+	"github.com/mattermost/mattermost-server/v6/plugin"
 )
 
 // FileBlockerPlugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
@@ -35,7 +35,23 @@ func stringSliceContains(s []string, e string) bool {
 // FileWillBeUploaded matches file attachments against known extensions from configuration
 func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.FileInfo, file io.Reader, output io.Writer) (*model.FileInfo, string) {
 	config := p.getConfiguration()
-	// message := "This file could not be attached to your post"
+	p.API.LogInfo("session Id from context", "sessionId", c.SessionId)
+	p.API.LogInfo("User Agent from context", "userAgent", c.UserAgent)
+	p.API.LogInfo("RequestId from context", "requestId", c.RequestId)
+	p.API.LogInfo("Plugin context", "pluginContext", c)
+
+	session, sessionErr := p.API.GetSession(c.SessionId)
+
+	if sessionErr != nil {
+		p.API.LogError("Session retrieval error", "error", sessionErr.Error(), "detailedError", sessionErr.DetailedError)
+		return nil, "File Blocker plugin - There was an error retrieving the session information"
+	}
+
+	if session.IsMobileApp() {
+		p.API.LogInfo("The session is a mobile session")
+	} else {
+		p.API.LogInfo("The session is not a mobile session")
+	}
 
 	extensions := strings.Split(config.AllowedExtensions, ",")
 
@@ -56,7 +72,7 @@ func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.Fi
 
 		if mimeErr != nil {
 			p.API.LogError("MIME Type detection error", "filename", info.Name, "user", info.CreatorId)
-			return nil, "File Blocker plugin - An error occured during the verification of the file attachment - Please contact your administrator"
+			return nil, "File Blocker plugin - An error occurred during the verification of the file attachment - Please contact your administrator"
 		}
 
 		p.API.LogDebug("MIME Output", "mimeTypeResult", mimeTypeResult.String())
