@@ -7,8 +7,8 @@ import (
 
 	"github.com/gabriel-vasile/mimetype"
 
-	"github.com/mattermost/mattermost-server/v5/model"
-	"github.com/mattermost/mattermost-server/v5/plugin"
+	"github.com/mattermost/mattermost-server/v6/model"
+	"github.com/mattermost/mattermost-server/v6/plugin"
 )
 
 // FileBlockerPlugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
@@ -72,7 +72,7 @@ func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.Fi
 
 		if mimeErr != nil {
 			p.API.LogError("MIME Type detection error", "filename", info.Name, "user", info.CreatorId)
-			return nil, "File Blocker plugin - An error occured during the verification of the file attachment - Please contact your administrator"
+			return nil, "File Blocker plugin - An error occurred during the verification of the file attachment - Please contact your administrator"
 		}
 
 		p.API.LogDebug("MIME Output", "mimeTypeResult", mimeTypeResult.String())
