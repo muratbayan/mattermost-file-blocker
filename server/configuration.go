@@ -18,9 +18,11 @@ import (
 // If you add non-reference types to your configuration struct, be sure to rewrite Clone as a deep
 // copy appropriate for your types.
 type configuration struct {
-	AllowedExtensions   string
-	ExtensionIsRequired bool
-	CheckMimeType       bool
+	AllowedExtensions      string
+	ExtensionIsRequired    bool
+	CheckMimeType          bool
+	AllowGuestAttachments  bool
+	AllowMobileAttachments bool
 }
 
 // Clone shallow copies the configuration. Your implementation may require a deep copy if

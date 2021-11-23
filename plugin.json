@@ -1,7 +1,7 @@
 {
     "id": "com.github.muratbayan.mattermost-file-blocker",
     "name": "File Blocker",
-    "description": "This plugin helps block the upload of unauthorized file extensions to the Mattermost server.",
+    "description": "This plugin manages file uploads to the Mattermost server.",
     "homepage_url": "https://github.com/muratbayan/mattermost-file-blocker",
     "support_url": "https://github.com/muratbayan/mattermost-file-blocker/issues",
     "version": "1.1.0",
@@ -35,6 +35,20 @@
                 "type": "bool",
                 "help_text": "Set to true if the plugin should check the MIME content type",
                 "default": false
+            },
+            {
+                "key": "AllowGuestAttachments",
+                "display_name": "Allow guest users to attach files",
+                "type": "bool",
+                "help_text": "Set to false to prevent guest users from using attachments",
+                "default": true
+            },
+            {
+                "key": "AllowMobileAttachments",
+                "display_name": "Allow mobile attachments",
+                "type": "bool",
+                "help_text": "Set to false to prevent file attachments from the Mattermost mobile application",
+                "default": true
             }
         ]
           

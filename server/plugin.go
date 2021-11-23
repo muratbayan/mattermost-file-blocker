@@ -39,6 +39,7 @@ func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.Fi
 	p.API.LogInfo("User Agent from context", "userAgent", c.UserAgent)
 	p.API.LogInfo("RequestId from context", "requestId", c.RequestId)
 	p.API.LogInfo("Plugin context", "pluginContext", c)
+	p.API.LogInfo("Filename for future checks", "filename", info.Name)
 
 	session, sessionErr := p.API.GetSession(c.SessionId)
 
@@ -51,6 +52,16 @@ func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.Fi
 		p.API.LogInfo("The session is a mobile session")
 	} else {
 		p.API.LogInfo("The session is not a mobile session")
+	}
+
+	user, userErr := p.API.GetUser(session.UserId)
+
+	if userErr != nil {
+		if user.IsGuest() {
+			p.API.LogInfo("The user is a guest")
+		} else {
+			p.API.LogInfo("The user is not a guest")
+		}
 	}
 
 	extensions := strings.Split(config.AllowedExtensions, ",")

@@ -11,3 +11,5 @@ This plugin allows Mattermost administrators to block file uploads with specific
 * Allowed extensions - Comma separated list of allowed (whitelisted) extensions. e.g. "doc,docx,png,pdf"
 * Require extension - true/false value to allow/reject files without extension
 * [Experimental] Validate Mime Content - true/false value to match the MIME extension extracted from the file if the file extension matches. This aims to avoid renaming a forbidden file extension to upload unauthorized files
+* Allow guest users to attach files - true/false value to allow/prevent guest accounts to post file attachments (defaults to true)
+* Allow Mobile Attachments - true/false value to allow/prevent file attachments from the Mattermost mobile application (defaults to true)
