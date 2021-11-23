@@ -50,6 +50,10 @@ func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.Fi
 
 	if session.IsMobileApp() {
 		p.API.LogInfo("The session is a mobile session")
+		if !config.AllowMobileAttachments {
+			p.API.LogInfo("File attachments are not allowed from the mobile application", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension)
+			return nil, "File Blocker plugin - File attachments are not allowed from the mobile application"
+		}
 	} else {
 		p.API.LogInfo("The session is not a mobile session")
 	}
@@ -59,6 +63,10 @@ func (p *FileBlockerPlugin) FileWillBeUploaded(c *plugin.Context, info *model.Fi
 	if userErr != nil {
 		if user.IsGuest() {
 			p.API.LogInfo("The user is a guest")
+			if !config.AllowGuestAttachments {
+				p.API.LogInfo("File attachments are not allowed for guest users", "filename", info.Name, "user", info.CreatorId, "extension", info.Extension)
+				return nil, "File Blocker plugin - File attachments are not allowed for guest users"
+			}
 		} else {
 			p.API.LogInfo("The user is not a guest")
 		}
